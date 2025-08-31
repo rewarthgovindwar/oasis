@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Requests\Admin\Reports;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class SubjectMarkSheetRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     */
+    public function rules(): array
+    {
+
+        if (moduleStatusCheck('University')) {
+            return [
+                'un_session_id' => 'required',
+                'un_faculty_id' => 'required',
+                'un_department_id' => 'required',
+                'un_academic_id' => 'required',
+                'un_semester_id' => 'required',
+                'un_semester_label_id' => 'required',
+                'un_subject_id' => 'required',
+            ];
+        }
+
+        return [
+            'class' => 'required',
+            'subject' => 'required',
+        ];
+
+    }
+}

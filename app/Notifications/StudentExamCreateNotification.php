@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Notifications;
+
+use App\SmNotification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use SpondonIt\FCM\FcmMessage;
+
+class StudentExamCreateNotification extends Notification
+{
+    use Queueable;
+
+    private $sm_notification;
+
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct(SmNotification $smNotification)
+    {
+        $this->sm_notification = $smNotification;
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     */
+    public function via($notifiable): array
+    {
+        return ['fcm'];
+    }
+
+    public function toFcm($notifiable): FcmMessage
+    {
+        $fcmMessage = new FcmMessage();
+        $notification = [
+            'title' => app('translator')->get('exam.exam_notification'),
+            'body' => $this->sm_notification->message,
+        ];
+        $data = [
+            'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+            'id' => 1,
+            'status' => 'done',
+            'message' => $notification,
+        ];
+        $fcmMessage->content($notification)
+            ->data($data)
+            ->priority(FcmMessage::PRIORITY_HIGH); // Optional - Default is 'normal'.
+
+        return $fcmMessage;
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     */
+    public function toArray($notifiable): array
+    {
+        return [
+            //
+        ];
+    }
+}

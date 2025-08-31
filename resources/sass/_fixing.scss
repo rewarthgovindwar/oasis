@@ -1,0 +1,25 @@
+.viewSubmitedHomework.attachment {
+    padding: 0;
+    width: fit-content;
+    border: 0.5px solid var(--primary-color);
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    border-radius: 4px;
+}
+
+.viewSubmitedHomework.attachment:hover{
+    background:  var(--primary-color);
+    color: white;
+}
+
+.no_data_table td,
+.no_data_table th{
+    padding: 12px 12px 12px 12px!important;
+}
+
+.student_incident_report_table tr td{
+    padding: 12px 12px 12px 12px!important;
+}
